@@ -55,9 +55,9 @@ function init() {
                     var buttonTimeout = setTimeout( function() {
                         show( buttonInstructions );
                         show( button );
-                    }, 2000 );
+                    }, 20000 );
                 }
-            }, 1000 );
+            }, 10000 );
         }
     });
 }
