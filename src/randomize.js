@@ -17,6 +17,14 @@ function shuffle( array ) {
   return array;
 }
 
+function getNumberArray( num ) {
+    var arr = [];
+    for ( var i = 0; i < num; i++ ){
+        arr.push( i );
+    }
+    return arr;
+}
+
 function hide( elem ) {
     elem.style.display = 'none';
 }
@@ -27,39 +35,38 @@ function show( elem ) {
 
 function init() {
     var overlay = document.getElementById( 'overlay' );
-    var taskInstructions = document.getElementById( 'task-instructions' );
-    var buttonInstructions = document.getElementById( 'button-instructions' );
+    var pageNumber = parseInt( overlay.dataset.pageNumber );
     var button = document.getElementById( 'start' );
+    var taskInstructions = document.getElementById( 'task-instructions' );
     var imageContainer = document.getElementById( 'images' );
     var images = imageContainer.querySelectorAll( 'img' );
-
-    var shuffledImages = shuffle( [].slice.call( images ) );
-
     var imageCount = images.length;
-    var counter = 0;
+    var order = localStorage.getItem('imageOrder');
+    
+    if ( order ) {
+        order = JSON.parse( order );
+    } else {
+        var arr = getNumberArray( imageCount );
+        order = shuffle( arr );
+        localStorage.setItem('imageOrder', JSON.stringify( order ) );
+    }
+
+    console.log( order );
 
     button.addEventListener( 'click', function() {
-        if ( counter < imageCount ) {
-            var currentImage = shuffledImages[ counter ];
-            hide( overlay );
-            hide( taskInstructions );
-            hide( buttonInstructions );
-            hide( button );
-            show( currentImage );
-            counter+=1;
-            var taskTimeout = setTimeout( function() {
-                hide( currentImage );
-                show( overlay );
-                if ( counter < imageCount ) {
-                    show( taskInstructions );
-                    var buttonTimeout = setTimeout( function() {
-                        show( buttonInstructions );
-                        show( button );
-                    }, 20000 );
-                }
-            }, 10000 );
-        }
+        var idx = order[ pageNumber ];
+        var currentImage = images[ idx ];
+        hide( overlay );
+        hide( button );
+        show( currentImage ); 
+        setTimeout( function() {
+            overlay.style.display = 'block';
+            hide( currentImage );
+            show( overlay );
+            show( taskInstructions );
+        },  10000 );           
     });
+    
 }
 
 window.addEventListener( 'load', init );
