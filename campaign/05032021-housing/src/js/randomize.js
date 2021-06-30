@@ -42,7 +42,7 @@ function init() {
     var images = imageContainer.querySelectorAll( 'img' );
     var imageCount = images.length;
     var order = localStorage.getItem('imageOrder');
-    
+
     if ( order ) {
         order = JSON.parse( order );
     } else {
@@ -58,15 +58,15 @@ function init() {
         var currentImage = images[ idx ];
         hide( overlay );
         hide( button );
-        show( currentImage ); 
+        show( currentImage );
         setTimeout( function() {
             overlay.style.display = 'block';
             hide( currentImage );
             show( overlay );
             show( taskInstructions );
-        },  10000 );           
+        },  10000 );
     });
-    
+
 }
 
 window.addEventListener( 'load', init );
