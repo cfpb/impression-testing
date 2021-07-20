@@ -1,28 +1,38 @@
-function shuffle( array ) {
-  var currentIndex = array.length, temporaryValue, randomIndex;
+var loadingTxt;
+var button;
+var taskInstructions;
+var imageContainer;
+var images;
+var assignedImageIndex;
+var savedImageIndex;
 
-  // While there remain elements to shuffle...
-  while (0 !== currentIndex) {
+function pageLoaded() {
+  taskInstructions = document.getElementById( 'task-instructions' );
+  imageContainer = document.getElementById( 'images' );
+  images = imageContainer.querySelectorAll( 'img' );
+  assignedImageIndex = getRandomInt( images.length );
+  savedImageIndex = sessionStorage.getItem( 'savedImageIndex' );
+  currentImage = savedImageIndex ? images[savedImageIndex] : images[assignedImageIndex];
 
-    // Pick a remaining element...
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
+  button = document.getElementById( 'start' );
+  loadingTxt = document.getElementById( 'loading-txt' );
+  hide( loadingTxt );
 
-    // And swap it with the current element.
-    temporaryValue = array[currentIndex];
-    array[currentIndex] = array[randomIndex];
-    array[randomIndex] = temporaryValue;
+  if ( savedImageIndex ) {
+    hide( button );
+    hide( taskInstructions );
+    show( currentImage );
+  } else {
+    firstLoad();
   }
-
-  return array;
 }
 
-function getNumberArray( num ) {
-    var arr = [];
-    for ( var i = 0; i < num; i++ ){
-        arr.push( i );
-    }
-    return arr;
+function getRandomInt( max ) {
+  return Math.floor(Math.random() * max);
+}
+
+function saveImageIndexToLocalStorage( index ) {
+  sessionStorage.setItem( 'savedImageIndex', index );
 }
 
 function hide( elem ) {
@@ -33,40 +43,18 @@ function show( elem ) {
     elem.style.display = 'block';
 }
 
-function init() {
-    var overlay = document.getElementById( 'overlay' );
-    var pageNumber = parseInt( overlay.dataset.pageNumber );
-    var button = document.getElementById( 'start' );
-    var taskInstructions = document.getElementById( 'task-instructions' );
-    var imageContainer = document.getElementById( 'images' );
-    var images = imageContainer.querySelectorAll( 'img' );
-    var imageCount = images.length;
-    var order = localStorage.getItem('imageOrder');
+function firstLoad() {
+  saveImageIndexToLocalStorage( assignedImageIndex );
+  show( button );
 
-    if ( order ) {
-        order = JSON.parse( order );
-    } else {
-        var arr = getNumberArray( imageCount );
-        order = shuffle( arr );
-        localStorage.setItem('imageOrder', JSON.stringify( order ) );
-    }
-
-    console.log( order );
-
-    button.addEventListener( 'click', function() {
-        var idx = order[ pageNumber ];
-        var currentImage = images[ idx ];
-        hide( overlay );
-        hide( button );
-        show( currentImage );
-        setTimeout( function() {
-            overlay.style.display = 'block';
-            hide( currentImage );
-            show( overlay );
-            show( taskInstructions );
-        },  10000 );
-    });
-
+  button.addEventListener( 'click', function() {
+    hide( button );
+    show( currentImage );
+    setTimeout( function() {
+      hide( currentImage );
+      show( taskInstructions );
+    },  15000 );
+  } );
 }
 
-window.addEventListener( 'load', init );
+window.addEventListener( 'load', pageLoaded );

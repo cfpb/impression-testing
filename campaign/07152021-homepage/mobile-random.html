@@ -6,24 +6,28 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Test</title>
-        <link rel="stylesheet" href="src/css/randomize.css">
+        <link rel="stylesheet" href="src/css/main.css">
         <script src="src/js/randomize.js"></script>
     </head>
     <body>
-        <div id="overlay" data-page-number="1">
+        <div id="overlay">
             <div id="instructions">
+                <div id="loading-txt">
+                    Loading. Please wait…
+                </div>
                 <div id="task-instructions" style="display:none;">
                     Follow directions in the task.
                 </div>
-                <button id="start">View image for 10 seconds</button>
+                <button id="start" style="display:none;">
+                    View image for 10 seconds
+                </button>
             </div>
         </div>
         <div id="images">
-            <img src="src/img/desktop-1.png" style="display:none;">
-            <img src="src/img/desktop-2.jpg" style="display:none;">
-            <img src="src/img/desktop-3.jpg" style="display:none;">
-            <img src="src/img/desktop-4.jpg" style="display:none;">
-            <img src="src/img/desktop-5.jpg" style="display:none;">
+            <img src="src/img/mobile-1.png" style="display:none;">
+            <img src="src/img/mobile-2.png" style="display:none;">
+            <img src="src/img/mobile-3.png" style="display:none;">
+            <img src="src/img/mobile-4.png" style="display:none;">
         </div>
     </body>
 </html>
